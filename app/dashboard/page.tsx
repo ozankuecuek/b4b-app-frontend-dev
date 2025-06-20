@@ -51,7 +51,7 @@ export default function DashboardPage() {
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">$45,231</div>
+              <div className="text-2xl font-bold">€45,231</div>
               <p className="text-xs text-muted-foreground">+12% from last month</p>
             </CardContent>
           </Card>
@@ -71,7 +71,7 @@ export default function DashboardPage() {
                     <p className="text-sm text-muted-foreground">Order #12345</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">$1,234</p>
+                    <p className="font-medium">€1,234</p>
                     <p className="text-sm text-green-600">Delivered</p>
                   </div>
                 </div>
@@ -81,7 +81,7 @@ export default function DashboardPage() {
                     <p className="text-sm text-muted-foreground">Order #12344</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">$5,678</p>
+                    <p className="font-medium">€5,678</p>
                     <p className="text-sm text-yellow-600">In Transit</p>
                   </div>
                 </div>
@@ -91,7 +91,7 @@ export default function DashboardPage() {
                     <p className="text-sm text-muted-foreground">Order #12343</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium">$890</p>
+                    <p className="font-medium">€890</p>
                     <p className="text-sm text-blue-600">Processing</p>
                   </div>
                 </div>
