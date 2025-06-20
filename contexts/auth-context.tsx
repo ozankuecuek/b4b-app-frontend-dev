@@ -2,51 +2,34 @@
 
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
-import { type User, onAuthStateChanged, signOut } from "firebase/auth"
-import { auth } from "@/lib/firebase"
+import { signInWithEmailAndPassword, onAuthStateChanged, signOut, type User } from "firebase/auth"
+import { getFirebaseAuth } from "@/lib/firebase-client"
 
-interface AuthContextType {
+interface AuthContextValue {
   user: User | null
-  loading: boolean
-  logout: () => Promise<void>
+  signIn: (email: string, pw: string) => Promise<void>
+  signOutFn: () => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const auth = getFirebaseAuth()
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser)
-      setLoading(false)
-    })
+    return onAuthStateChanged(auth, setUser)
+  }, [auth])
 
-    return () => unsubscribe()
-  }, [])
+  const signIn = async (email: string, pw: string) => signInWithEmailAndPassword(auth, email, pw).then(() => void 0)
 
-  const logout = async () => {
-    try {
-      await signOut(auth)
-    } catch (error) {
-      console.error("Sign out error:", error)
-    }
-  }
+  const signOutFn = () => signOut(auth)
 
-  const value = {
-    user,
-    loading,
-    logout,
-  }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, signIn, signOutFn }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
-  }
-  return context
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error("useAuth must be used inside <AuthProvider>")
+  return ctx
 }
